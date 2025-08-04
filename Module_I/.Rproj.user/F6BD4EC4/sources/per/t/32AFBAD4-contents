@@ -54,10 +54,10 @@ data$gender_num <- ifelse(data$gender_fac == "Female", 1, 0)   #factor into nume
 class(data$gender_num)
 data$gender_num <- as.factor(data$gender_num)
 write.csv(disease_status, file = "results/patient_info_clean.csv")
-save.image(file = "full_workpace.RData")
+save.image(file = "SubhadipJana_Class_Ib_Assignment.RData")
 save(gene_expression, disease_status, file = "workpace.RData")
 load("workpace.RData")
-load("full_workpace.RData")
+load("SubhadipJana_Class_Ib_Assignment.RData")
 
 
 
