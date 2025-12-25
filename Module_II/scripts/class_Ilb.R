@@ -59,7 +59,7 @@ for (i in 1:nrow(df1)) {
 
 # Method 3: Vectorized approach (most R-like)
 df1$status <- ifelse(df1$padj < 0.05 & df1$logFC > 1, "Upregulated",
-                     ifelse(df1$padj < 0.05 & df1$logFC < -1, "Downregulated", 
+                     ifelse(df1$padj < 0.05 & df1$logFC < -1, "Downregulated",
                             "Not_Significant"))
 
 
@@ -72,12 +72,12 @@ status_summary <- table(df1$status)
 print(status_summary)
 
 # More detailed summary with all possible categories
-status_detailed <- table(factor(df1$status, 
+status_detailed <- table(factor(df1$status,
                                 levels = c("Upregulated", "Downregulated", "Not_Significant")))
 print(status_detailed)
 
 # Save the processed dataset
-write.csv(df1, "Results/DEGs_Data_1_processed.csv", row.names = FALSE)
+write.csv(df1, "results/DEGs_Data_1_processed.csv", row.names = FALSE)
 
 cat("Saved processed dataset 1\n")
 
@@ -90,35 +90,36 @@ files <- c("DEGs_Data_1.csv", "DEGs_Data_2.csv")
 # Process each file in a loop
 for (i in seq_along(files)) {
   cat("\n=== Processing", files[i], "===\n")
-  
+
   # Load dataset
-  df <- read.csv(files[i])
+  # Fix: Prepend 'data/' to the filename
+  df <- read.csv(file.path("data", files[i]))
   cat("Loaded", nrow(df), "genes\n")
-  
+
   # Handle missing values
   missing_count <- sum(is.na(df$padj))
   cat("Missing padj values:", missing_count, "\n")
   df$padj[is.na(df$padj)] <- 1
-  
+
   # Apply classification
   df$status <- mapply(classify_gene, df$logFC, df$padj)
-  
+
   # Generate summary
   cat("Gene classification summary:\n")
-  status_table <- table(factor(df$status, 
+  status_table <- table(factor(df$status,
                                levels = c("Upregulated", "Downregulated", "Not_Significant")))
   print(status_table)
-  
+
   # Save processed file
-  output_filename <- paste0("Results/", gsub(".csv", "_processed.csv", files[i]))
+  output_filename <- paste0("results/", gsub(".csv", "_processed.csv", files[i]))
   write.csv(df, output_filename, row.names = FALSE)
   cat("Saved to:", output_filename, "\n")
 }
 
 
 # Load both processed files for final comparison
-df1_final <- read.csv("Results/DEGs_Data_1_processed.csv")
-df2_final <- read.csv("Results/DEGs_Data_2_processed.csv")
+df1_final <- read.csv("results/DEGs_Data_1_processed.csv")
+df2_final <- read.csv("results/DEGs_Data_2_processed.csv")
 
 # Compare datasets
 cat("\n=== FINAL COMPARISON ===\n")
@@ -131,5 +132,3 @@ print(table(df2_final$status))
 cat("\nDataset 2 proportions:\n")
 props <- prop.table(table(df2_final$status))
 print(round(props * 100, 2))
-
-
