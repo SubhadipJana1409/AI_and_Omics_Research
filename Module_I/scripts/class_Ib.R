@@ -1,8 +1,9 @@
 # create subfolder(data,script, results)
 
-dir.create("data")
-dir.create("scripts")
-dir.create("results")
+# Note: In the reorganized structure, these folders should already exist.
+# dir.create("data")
+# dir.create("scripts")
+# dir.create("results")
 
 gene_expression <- c(2.2, 4.4, 6.6, 8.8, 10.10, 12.12, 14.14, 16.16, 18.18)
 mean(gene_expression)
@@ -40,7 +41,7 @@ disease_status <- factor(disease_status,
 disease_status
 age <- c(1,2,3,4,5,6,7,8)
 var_5 <- age < 6
-data <- read.csv(file.choose())
+data <- read.csv("data/raw_data/patient_info.csv") # Updated path
 View(data)
 str(data)  #view the struicture the data
 data$height_fac <- as.factor(data$height)
@@ -54,18 +55,7 @@ data$gender_num <- ifelse(data$gender_fac == "Female", 1, 0)   #factor into nume
 class(data$gender_num)
 data$gender_num <- as.factor(data$gender_num)
 write.csv(disease_status, file = "results/patient_info_clean.csv")
-save.image(file = "SubhadipJana_Class_Ib_Assignment.RData")
-save(gene_expression, disease_status, file = "workpace.RData")
-load("workpace.RData")
-load("SubhadipJana_Class_Ib_Assignment.RData")
-
-
-
-
-
-
-
-
-
-
-
+save.image(file = "results/SubhadipJana_Class_Ib_Assignment.RData") # Updated output path
+save(gene_expression, disease_status, file = "results/workpace.RData") # Updated output path
+load("results/workpace.RData") # Updated input path
+load("results/SubhadipJana_Class_Ib_Assignment.RData") # Updated input path
